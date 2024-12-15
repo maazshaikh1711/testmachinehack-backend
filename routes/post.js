@@ -1,10 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Post = require('../models/Post');
+const { authenticateJWT } = require('../middleware/authenticateJWT');
 const router = express.Router();
 
 // Create new post
-router.post('/', async (req, res) => {
+router.post('/', authenticateJWT, async (req, res) => {
   console.log("..........", req, req.user)
   const { caption, imageUrl } = req.body;
 
