@@ -21,4 +21,11 @@ router.post('/register', async (req, res) => {
   res.status(201).json({ message: 'User registered successfully' });
 });
 
+// Login Route
+router.post('/login', async(req, res) => {
+  const token = jwt.sign({ id: req.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  res.json({ token });
+});
+
+
 module.exports = router;
