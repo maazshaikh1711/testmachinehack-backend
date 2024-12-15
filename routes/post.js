@@ -6,7 +6,6 @@ const router = express.Router();
 
 // Create new post
 router.post('/', authenticateJWT, async (req, res) => {
-  console.log("..........", req, req.user)
   const { caption, imageUrl } = req.body;
 
   if (!caption && !imageUrl) {

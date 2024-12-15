@@ -4,7 +4,6 @@ const Comment = require('../models/Comment');
 const { authenticateJWT } = require('../middleware/authenticateJWT');
 const router = express.Router();
 
-console.log("...........")
 // Create a comment
 router.post('/:postId', authenticateJWT, async (req, res) => {
   const { content } = req.body;
@@ -29,7 +28,6 @@ router.post('/:postId', authenticateJWT, async (req, res) => {
   }
 });
 
-console.log('--------------')
 // Get all comments for a post
 router.get('/:postId', async (req, res) => {
   const { postId } = req.params;

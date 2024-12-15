@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 function authenticateJWT(req, res, next) {
-
+  console.log("=======", req.body);
   // fetch token from request headers
   const token = req.header('Authorization')?.split(' ')[1];
   if (!token) {
@@ -11,6 +11,7 @@ function authenticateJWT(req, res, next) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded; // Add user data to the request
+    console.log("=======>", decoded);
     next();
   } catch (err) {
     res.status(401).json({ error: 'Token is not valid' });

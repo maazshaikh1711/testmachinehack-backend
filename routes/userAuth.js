@@ -6,13 +6,8 @@ const passport = require('passport');
 const User = require('../models/User');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-    res.send('Hiiiiiiii')
-})
-
 // Register Route
 router.post('/register', async (req, res) => {
-  console.log('registering.........', req)
   const { username, password } = req.body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
