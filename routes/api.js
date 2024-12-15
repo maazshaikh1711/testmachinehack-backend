@@ -2,6 +2,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const User = require('../models/User');
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Login Route
-router.post('/login', async(req, res) => {
+router.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
   const token = jwt.sign({ id: req.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
   res.json({ token });
 });
