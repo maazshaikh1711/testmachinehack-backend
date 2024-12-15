@@ -10,7 +10,11 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Authorization', 'Content-Type']
+  }));
 
 // Initialise Passport
 app.use(passport.initialize());
@@ -27,11 +31,11 @@ const server = app.listen(5000, () => {
 
 
 //Add Routes    
-const apiRoutes = require('./routes/userAuth');
+const userAuthRoutes = require('./routes/userAuth');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
 
-app.use('/api/v1', apiRoutes);
+app.use('/api/v1/auth', userAuthRoutes);
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/comments', commentRoutes);
 
