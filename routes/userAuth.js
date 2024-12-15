@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
 
 // Login Route
 router.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
-  const token = jwt.sign({ id: req.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
   res.json({ token });
 });
 
