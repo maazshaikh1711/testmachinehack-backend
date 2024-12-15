@@ -20,12 +20,18 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
+//Listening to server
 const server = app.listen(5000, () => {
       console.log('Server running on port 5000');
     });
 
+
+//Add Routes    
 const apiRoutes = require('./routes/userAuth');
+const postRoutes = require('./routes/post');
+
 app.use('/api/v1', apiRoutes);
+app.use('/api/v1/posts', postRoutes);
 
 
 // Socket.io setup
@@ -42,4 +48,3 @@ io.on('connection', socket => {
 app.use((req, res, next) => {
     res.status(404).json({ error: 'Route not found' });
   });
-  
