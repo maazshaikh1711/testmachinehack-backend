@@ -29,10 +29,11 @@ const server = app.listen(5000, () => {
 //Add Routes    
 const apiRoutes = require('./routes/userAuth');
 const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 
 app.use('/api/v1', apiRoutes);
 app.use('/api/v1/posts', postRoutes);
-
+app.use('/api/v1/comments', commentRoutes);
 
 // Socket.io setup
 const io = socketio(server);
