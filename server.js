@@ -24,7 +24,7 @@ const server = app.listen(5000, () => {
       console.log('Server running on port 5000');
     });
 
-const apiRoutes = require('./routes/api');
+const apiRoutes = require('./routes/userAuth');
 app.use('/api/v1', apiRoutes);
 
 
