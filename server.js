@@ -20,6 +20,9 @@ const server = app.listen(5000, () => {
       console.log('Server running on port 5000');
     });
 
+const apiRoutes = require('./routes/api');
+app.use('/api/v1', apiRoutes);
+
 
 // Socket.io setup
 const io = socketio(server);
@@ -31,3 +34,8 @@ io.on('connection', socket => {
 });
 
 
+// Handle 404 errors
+app.use((req, res, next) => {
+    res.status(404).json({ error: 'Route not found' });
+  });
+  
