@@ -37,7 +37,7 @@ const swaggerDefinition = {
       bearerAuth: {
         type: 'http',
         scheme: 'bearer',
-        bearerFormat: 'JWT' // Optional, but useful for clarity
+        bearerFormat: 'JWT'
       }
     }
   }
