@@ -4,6 +4,47 @@ const Comment = require('../models/Comment');
 const { authenticateJWT } = require('../middleware/authenticateJWT');
 const router = express.Router();
 
+
+/**
+ * @swagger
+ * /api/v1/comments/{postId}:
+ *   post:
+ *     summary: Create a comment for a post
+ *     tags: [Comments]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the post to comment on
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - content
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The content of the comment
+ *     responses:
+ *       201:
+ *         description: Comment created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ *       400:
+ *         description: Bad Request (missing content)
+ *       500:
+ *         description: Internal server error
+ */
+
 // Create a comment
 router.post('/:postId', authenticateJWT, async (req, res) => {
   const { content } = req.body;
@@ -27,6 +68,33 @@ router.post('/:postId', authenticateJWT, async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+/**
+ * @swagger
+ * /api/v1/comments/{postId}:
+ *   get:
+ *     summary: Get all comments for a post
+ *     tags: [Comments]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the post
+ *     responses:
+ *       200:
+ *         description: Successfully fetched comments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Comment'
+ *       500:
+ *         description: Internal server error
+ */
 
 // Get all comments for a post
 router.get('/:postId', async (req, res) => {
