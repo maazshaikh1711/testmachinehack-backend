@@ -10,6 +10,7 @@ const router = express.Router();
  * /api/v1/posts:
  *   post:
  *     summary: Create a new post
+ *     tags: [Posts]
  *     description: This endpoint allows an authenticated user to create a new post with a caption and/or an image URL.
  *     security:
  *       - bearerAuth: []  # Uses JWT for authentication
@@ -90,6 +91,7 @@ router.post('/', authenticateJWT, async (req, res) => {
  * /api/v1/posts:
  *   get:
  *     summary: Get all posts
+ *     tags: [Posts]
  *     description: Fetch all posts from the database. This endpoint requires authentication.
  *     security:
  *       - bearerAuth: []  # Uses JWT for authentication

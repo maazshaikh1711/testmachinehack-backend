@@ -11,6 +11,7 @@ const router = express.Router();
  * /api/v1/auth/register:
  *   post:
  *     summary: "Register a new user"
+ *     tags: [Register/Login]
  *     description: "This endpoint allows a user to register with a username and password."
  *     requestBody:
  *       required: true
@@ -59,6 +60,7 @@ router.post('/register', async (req, res) => {
  * /api/v1/auth/login:
  *   post:
  *     summary: "Login a user"
+ *     tags: [Register/Login]
  *     description: "This endpoint allows a user to log in using their username and password and receive a JWT token."
  *     requestBody:
  *       required: true
