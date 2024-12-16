@@ -31,8 +31,16 @@ const swaggerDefinition = {
       url: 'http://localhost:5000',
       description: 'Local server'
     }
-  ]
-  
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT' // Optional, but useful for clarity
+      }
+    }
+  }
 };
 
 const options = {
