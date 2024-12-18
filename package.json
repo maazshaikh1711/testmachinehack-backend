@@ -25,5 +25,8 @@
     "socket.io": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/socket.io": "^3.0.2"
   }
 }
