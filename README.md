@@ -5,13 +5,13 @@ This is a simple social media platform where users can:
 - Sign up and log in using JWT authentication.
 - Create posts with text and optional image uploads.
 - Comment on posts.
-- View a real-time feed of posts and comments. (Ongoing Task)
+- View a real-time feed of posts and comments.
 
 ### Key Features
 - **User Authentication**: Secure login and registration with JWT.
-- **Post Creation**: Add captions and upload images (stored in Amazon S3) (Upcoming Task).
+- **Post Creation**: Add captions and upload images (stored in Amazon S3).
 - **Commenting**: Add comments on posts.
-- **Real-Time Updates**: Posts and comments update live using Socket.io and Redis. (Ongoing Task)
+- **Real-Time Updates**: Posts and comments update live using Socket.io and Redis.
 - **Data Persistence**: Metadata is stored in MongoDB.
 - **API Documentation**: Endpoints documented using Swagger.
 
@@ -22,8 +22,8 @@ This is a simple social media platform where users can:
 ### Prerequisites
 1. **Node.js** (version 14.x or above)
 2. **MongoDB** (running locally or using a cloud service like MongoDB Atlas)
-3. **Redis** (ongoing Task)
-4. **Amazon S3** credentials for image uploads (Upcoming Task)
+3. **Redis**
+4. **Amazon S3** credentials for image uploads
 
 ### Environment Variables
 Create a `.env` file in the root directory of the backend project with the following variables:
