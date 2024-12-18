@@ -77,8 +77,9 @@ module.exports = (io) => {
         });
 
         const savedPost = await newPost.save();
-        io.emit('newPost', savedPost); // Emit the new post event to all clients
-        res.status(201).json({ message: 'Post created successfully', post: savedPost });
+        const populatedPost = await Post.findById(savedPost._id).populate('user', 'username');
+        io.emit('newPost', populatedPost); // Emit the new post event to all clients
+        res.status(201).json({ message: 'Post created successfully', post: populatedPost });
     } catch (err) {
         console.error('Error creating post:', err);
         res.status(500).json({ error: 'Server error' });

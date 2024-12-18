@@ -46,12 +46,24 @@ const router = express.Router();
 // Register Route
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = new User({ username, password: hashedPassword });
-  await newUser.save();
-  res.status(201).json({ message: 'User registered successfully' });
+  try{
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({ username, password: hashedPassword });
+    await newUser.save();
+    res.status(201).json({ message: 'User registered successfully' });
+  }
+  catch(error){
+    // Handle Mongo duplicate key error specifically
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Username already exists. Please choose a different one.' });
+    }
+
+    // Handle other potential errors
+    return res.status(500).json({ message: 'An error occurred during registration. Please try again later.' });
+  }
 });
 
 

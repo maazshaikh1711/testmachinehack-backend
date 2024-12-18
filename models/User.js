@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -6,4 +5,17 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-module.exports = mongoose.model('User', userSchema);
+userSchema.pre('save', async function (next) {
+  const userWithSameUsername = await User.findOne({ username: this.username });
+  if (userWithSameUsername && userWithSameUsername._id !== this._id) {
+    const error = new Error('Username already exists');
+    error.code = 11000; // MongoDB's duplicate key error code
+    next(error);
+  } else {
+    next();
+  }
+});
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User; 
