@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const http = require('http');
-const { Server } = require('socket.io'); // Import Socket.io
+const { Server } = require('socket.io');
 const passport = require('./config/passport');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -74,7 +74,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Routes  
 const userAuthRoutes = require('./routes/userAuth');
 const postRoutes = require('./routes/post')(io); // Pass io to postRoutes
-const commentRoutes = require('./routes/comment');
+const commentRoutes = require('./routes/comment')(io);
 
 app.use('/api/v1/auth', userAuthRoutes);
 app.use('/api/v1/posts', postRoutes);
@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
     });
 });
 
-// Share io instance globally (optional)
+// Share io instance globally
 app.set('io', io);
 
 // Start the server
