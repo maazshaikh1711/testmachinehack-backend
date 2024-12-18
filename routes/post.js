@@ -1,9 +1,40 @@
 const express = require('express');
 const Post = require('../models/Post');
 const { authenticateJWT } = require('../middleware/authenticateJWT');
+const {generatePresignedUrl, generateSignedUrl} = require('../aws');
 const router = express.Router();
+// const multer = require('multer');
 
 module.exports = (io) => {
+
+    // // Set up multer storage and file destination
+    // const storage = multer.diskStorage({
+    //     destination: (req, file, cb) => {
+    //     cb(null, 'uploads/'); // Specify where to save the image
+    //     },
+    //     filename: (req, file, cb) => {
+    //     cb(null, Date.now() + '-' + file.originalname); // Specify file naming
+    //     }
+    // });
+    
+    // const upload = multer({ storage }); // Create multer instance
+
+      
+    // Express.js route to handle the request
+    router.post('/upload-s3-presign', async (req, res) => {
+        const { fileName, fileType } = req.body;
+        
+        try {
+            const url = await generatePresignedUrl(fileName, fileType);
+            const key = `uploads/${fileName}`;  // Store the S3 key (path) to retrieve later
+        
+            res.json({ url, key });  // Return the pre-signed URL and key to the frontend
+        } catch (err) {
+            console.error('Error generating pre-signed URL:', err);
+            res.status(500).json({ error: 'Server error' });
+        }
+    });
+
   /**
    * @swagger
    * /api/v1/posts:
@@ -63,9 +94,11 @@ module.exports = (io) => {
    */
   // Create new post
   router.post('/', authenticateJWT, async (req, res) => {
-    const { caption, imageUrl } = req.body;
 
-    if (!caption && !imageUrl) {
+    const { caption, imageKey } = req.body;
+    // upload.single('image')
+
+    if (!caption && !imageKey) {
         return res.status(400).json({ error: 'Caption or image URL is required' });
     }
 
@@ -73,13 +106,20 @@ module.exports = (io) => {
         const newPost = new Post({
             user: req.user.id, // Extracted from the JWT token
             caption,
-            imageUrl,
+            imageKey
         });
 
         const savedPost = await newPost.save();
         const populatedPost = await Post.findById(savedPost._id).populate('user', 'username');
-        io.emit('newPost', populatedPost); // Emit the new post event to all clients
-        res.status(201).json({ message: 'Post created successfully', post: populatedPost });
+        const imageUrl = imageKey? generateSignedUrl(imageKey):null
+        
+        const postWithImageUrl = {
+            ...populatedPost.toObject(),
+            imageUrl,
+          };
+        
+        io.emit('newPost', postWithImageUrl); // Emit the new post event to all clients
+        res.status(201).json({ message: 'Post created successfully', post: postWithImageUrl });
     } catch (err) {
         console.error('Error creating post:', err);
         res.status(500).json({ error: 'Server error' });
@@ -129,7 +169,17 @@ module.exports = (io) => {
             .populate('user', 'username') // Populate the user field to include the username
             .sort({ createdAt: -1 }); // Sort by newest first
 
-        res.status(200).json(posts);
+        // Dynamically generate signed URLs for imageKey
+        const postsWithSignedUrls = posts.map((post) => {
+            const signedUrl = post.imageKey
+            ? generateSignedUrl(post.imageKey.replace(`${process.env.S3_BASE_URL}/`, '')) // Extract key from imageKey
+            : null;
+            return {
+                ...post.toObject(),
+                imageUrl: signedUrl,
+            };
+        });
+        res.status(200).json(postsWithSignedUrls);
     } catch (err) {
         console.error('Error fetching posts:', err);
         res.status(500).json({ error: 'Server error' });
