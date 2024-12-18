@@ -5,7 +5,7 @@ const PostSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     caption: { type: String, required: true }, // Caption for the post
-    imageUrl: { type: String, required: false }, // Optional image URL
+    imageKey: { type: String, required: false }, // Optional image URL
   },
   { timestamps: true }
 );
